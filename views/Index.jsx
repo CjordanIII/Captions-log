@@ -9,14 +9,22 @@ function Index({getDb}){
             {
                 getDb.map((data)=>{ return (
                   <li key={data._id}>
-                    <a href={`/captions-log/create/${data._id}`}>{data.title}</a>
+                    <a href={`/captions-log/create/${data._id}`}>
+                      {data.title}
+                    </a>
+                    {/* Edit */}
+                    <br/>
+                    <a href={`/captions-log/edit/${data._id}`}>Edit Tweet</a>
+
                     {/* Delete */}
-                    <form method="POST" action={`/captions-log/create/${data._id}?_method=DELETE`}>
-                      <input type="submit" value='Delete'/>
+                    <form
+                      method="POST"
+                      action={`/captions-log/create/${data._id}?_method=DELETE`}
+                    >
+                      <input type="submit" value="Delete" />
                     </form>
                   </li>
-
-                )})
+                );})
               
             }
 

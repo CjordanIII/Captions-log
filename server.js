@@ -74,5 +74,33 @@ app.delete("/captions-log/create/:id",async(req,res)=>{
     }
 });
 
+//Edit
+app.get("/captions-log/edit/:id",async(req,res)=>{
+    const {id} = req.params
+    try{
+        const findLog = await Captain.findById(id)
+        res.render("Edit",{findLog});
+    }catch(e){
+        console.log(e)
+    }
+    
+});
+
+
+app.put("/captions-log/edit/:id",async(req,res)=>{
+    const {id} =req.params
+      if (req.body.shipIsBroken === "on") {
+        req.body.shipIsBroken = true;
+      } else {
+        req.body.shipIsBroken = false;
+      }
+    try{
+        const updateLog = await Captain.findByIdAndUpdate(id,req.body,{new:true})
+        res.redirect(`/captions-log`);// change
+    }catch(e){
+        console.log(e)
+    }
+});
+//TODO put controllers in controllers folder
 connectDb()
 app.listen(PORT,()=>{console.log(`Listening on port: ${PORT}`)})
