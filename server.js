@@ -3,6 +3,7 @@ require('dotenv').config()
 const connectDb = require('./utils/mongodb')
 const Captain = require('./module/logsdb')
 const jsxEngine = require("jsx-view-engine");
+const methodOverride = require('method-override')
 
 //*variables
 const app = express();
@@ -16,7 +17,7 @@ app.engine('jsx',jsxEngine())
 //*Middleware
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
-
+app.use(methodOverride('_method'))
 
 
 // testing
@@ -52,9 +53,26 @@ app.post("/captions-log",async (req,res)=>{
 });
 
 //create
-app.get('/captions-log/create',(req,res)=>{
-    res.render('Show')
+app.get('/captions-log/create/:id', async(req,res)=>{
+    const {id} = req.params
+    try{
+        const log = await Captain.findById(id);
+        res.render("Show", { log });
+    }catch(e){
+        console.log(e)
+    }
 })
+
+//Delete
+app.delete("/captions-log/create/:id",async(req,res)=>{
+    const {id} = req.params
+    try{
+    const deletedLog = await Captain.findByIdAndDelete(id);
+    res.redirect('/captions-log');
+    }catch(e){
+        console.log(e)
+    }
+});
 
 connectDb()
 app.listen(PORT,()=>{console.log(`Listening on port: ${PORT}`)})
